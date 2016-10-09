@@ -1,0 +1,146 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import org.junit.Test;
+
+import util.JdbcUtil;
+
+public class DML {
+	private String url = "jdbc:mysql://localhost:3306/test_1";
+	private String user = "root";
+	private String password = "123123";
+	@Test
+	public void Insert(){
+		Connection conn = null;
+		Statement stmt = null;
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				
+				conn = DriverManager.getConnection(url, user, password);
+				
+				stmt = conn.createStatement();
+				
+				String sql = "INSERT INTO student (stuNo,stuName,stuAge)VALUES(2013100141,'zhangyun',20)";
+				
+				int counts = stmt.executeUpdate(sql);
+				
+				System.out.println("影响了"+counts+"行");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}finally{
+				try {
+					if(stmt!=null)stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+				try {
+					if(conn!=null)conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+			}
+		
+		
+	}
+	@Test
+	public void Update(){
+		Connection conn = null;
+		Statement stmt = null;
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				
+				conn = DriverManager.getConnection(url, user, password);
+				
+				stmt = conn.createStatement();
+				
+				String sql = "UPDATE student SET stuName='chaun' WHERE stuNo=2013100127";
+				/*将写死的常量用变量替换，模拟用户输入数据
+				 * eg：stuName='chaun' --> stuName='""' -->stuName='"++"' -->stuName='"+name+"'
+				 * 
+				 * 将常量用 双引号加号变量加号双引号 代替即可
+				 * */
+				
+				
+				int counts = stmt.executeUpdate(sql);
+				
+				System.out.println("影响了"+counts+"行");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}finally{
+				try {
+					if(stmt!=null)stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+				try {
+					if(conn!=null)conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+			}
+		
+		
+	}
+	@Test
+	public void Delete(){
+		Connection conn = null;
+		Statement stmt = null;
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				
+				conn = DriverManager.getConnection(url, user, password);
+				
+				stmt = conn.createStatement();
+				
+				String sql = "DELETE FROM student WHERE stuNo=2013100127";
+				
+				int counts = stmt.executeUpdate(sql);
+				
+				System.out.println("影响了"+counts+"行");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}finally{
+				try {
+					if(stmt!=null)stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+				try {
+					if(conn!=null)conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+			}
+	}
+	
+	//增删改代码高度重合，所以进行抽取，创建util类。
+	
+	//完成工具类后，应用工具类完成查询操作：
+	@Test
+	public void Select(){
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+		JdbcUtil.getConnection();
+		}catch (Exception e){
+			
+		}finally{
+			JdbcUtil.Close(conn, stmt);
+		}
+	}
+	
+}
