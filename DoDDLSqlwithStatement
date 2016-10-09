@@ -1,0 +1,56 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import org.junit.Test;
+
+public class DDL { 
+	private String url = "jdbc:mysql://localhost:3306/test_1";
+	private String user = "root";
+	private String password = "123123";
+	Statement stmt = null;
+	Connection conn = null;
+	@Test
+	public void demo1(){ //创建一张表
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(url, user, password);
+			//创建statement对象
+		    stmt = conn.createStatement();
+			//准备SQL语句：创建一张表
+			String sql = "CREATE TABLE student (stuNo INT PRIMARY KEY AUTO_INCREMENT,stuName VARCHAR(20),stuAge INT)";
+			//发送SQL语句，执行
+			int counts = stmt.executeUpdate(sql);
+			
+			System.out.println("影响了"+counts+"行");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}finally{
+			//关闭连接：需要关闭的对象：conn,stmt
+			//顺序：后打开的先关闭
+			//关闭之前需要判断，所以把conn和stmt的声明周期放宽。
+			if(stmt!=null){
+				try {
+					stmt.close();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+			}
+			if(conn!=null){
+				try {
+					conn.close();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+			}
+		}
+		
+		
+	}
+}
